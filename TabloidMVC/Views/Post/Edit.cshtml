@@ -42,12 +42,12 @@
                 <input asp-for="PublishDateTime" class="form-control" />
                 <span asp-validation-for="PublishDateTime" class="text-danger"></span>
             </div>
-            @*<div class="form-group form-check">*@
-                @*<label class="form-check-label">*@
-                    <input class="form-check-input" asp-for="IsApproved" type="hidden"/> 
-                    @*@Html.DisplayNameFor(model => model.IsApproved)*@
-                @*</label>*@
-          @*  </div>*@
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsApproved" checked /> @*Currently have the box set to always be chekced so edits are approved *@
+                    @Html.DisplayNameFor(model => model.IsApproved)
+                </label>
+          </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
                 <input asp-for="CategoryId" class="form-control" />
