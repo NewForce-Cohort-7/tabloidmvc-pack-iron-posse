@@ -90,7 +90,13 @@ namespace TabloidMVC.Controllers
                 return NotFound();
             }
 
-            return View(post);
+            else if (post.UserProfileId != userId)
+            {
+                return NotFound();
+            }
+            else { return View(post); }
+
+            
         }
 
         //POST: Post/Edit/5
@@ -100,7 +106,6 @@ namespace TabloidMVC.Controllers
         {
             try
             {
-
                 _postRepository.UpdatePost(post);
 
                 return RedirectToAction("Index");
