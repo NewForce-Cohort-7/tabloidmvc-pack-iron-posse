@@ -96,6 +96,14 @@ namespace TabloidMVC.Controllers
             }
         }
 
+        // GET: Tag/Delete/Id
+        public ActionResult Delete(int id)
+        {
+            Tag tag = _tagRepo.GetTagById(id);
+
+            return View(tag);
+        }
+
         //POST: Tag/Delete/Id
         [HttpPost]
         [ValidateAntiForgeryToken]
