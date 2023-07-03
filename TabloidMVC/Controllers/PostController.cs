@@ -89,19 +89,15 @@ namespace TabloidMVC.Controllers
         // GET: Posts/Edit/5
         public IActionResult Edit(int id) 
         {
-            int userId = GetCurrentUserProfileId();
-            Post post = _postRepository.GetUserPostById(id, userId);
+            var vm = new PostEditViewModel();
+            vm.Post = _postRepository.GetPublishedPostById(id);
+            vm.CategoryOptions = _categoryRepository.GetAll();
 
-            if (post == null)
+            if (vm.Post == null)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
-
-            else if (post.UserProfileId != userId)
-            {
-                return NotFound();
-            }
-            else { return View(post); }
+            return View(vm);
 
             
         }
