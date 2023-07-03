@@ -12,7 +12,7 @@ namespace TabloidMVC.Controllers
         {
             _categoryRepo = categoryRepo;
         }
-        //GET
+        //GET for listing all
         public ActionResult Index() 
         {
             List<Category> categories = _categoryRepo.GetAll();
@@ -23,7 +23,7 @@ namespace TabloidMVC.Controllers
         {
             return View();
         } 
-        //POST for creating
+        //POST for creating categories
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create (Category category) 
