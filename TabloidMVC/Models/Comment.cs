@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace TabloidMVC.Models
 {
     public class Comment
@@ -8,7 +12,8 @@ namespace TabloidMVC.Models
         public string Subject { get; set; }
         public string Content { get; set; }
         public DateTime CreateDateTime { get; set; }
-        public UserProfile UserProfile { get; set; }
+        public UserProfile DisplayName { get; set; }
         public Post Post { get; set; }
+        
     }
 }
