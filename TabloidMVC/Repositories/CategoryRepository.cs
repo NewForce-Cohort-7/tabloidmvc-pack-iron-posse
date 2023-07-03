@@ -44,7 +44,7 @@ namespace TabloidMVC.Repositories
                     cmd.CommandText = @"
                         INSERT INTO Category ([Name] )
                         VALUES (@name)";
-                    cmd.Parameters.AddWithValue("@name", category.Name);
+                    cmd.Parameters.AddWithValue("@name", Category.Name);
                     category.Id = (int)cmd.ExecuteScalar();
                 }
             }
