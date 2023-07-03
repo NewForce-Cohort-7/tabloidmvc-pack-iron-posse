@@ -25,9 +25,20 @@
                             <li class="nav-item ">
                                 <a class="nav-link rounded " asp-area="" asp-controller="Home" asp-action="Index">HOME</a>
                             </li>
-                            <li class="nav-item ">
-                                <a class="nav-link  rounded " asp-area="" asp-controller="Post" asp-action="Index">POSTS</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link rounded dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    POSTS MENU
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <!-- Dropdown menu items -->
+                                    <a class="dropdown-item" asp-area="" asp-controller="Post" asp-action="Index">ALL POSTS</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Post" asp-action="MyIndex">MY POSTS</a>
+
+                                </div>
                             </li>
+                            @*<li class="nav-item ">
+                                <a class="nav-link  rounded " asp-area="" asp-controller="Post" asp-action="Index">POSTS</a>
+                            </li>*@
                             <li class="nav-item ">
                                 <a class="nav-link  rounded " asp-area="" asp-controller="Tag" asp-action="Index">TAGS</a>
                             </li>
