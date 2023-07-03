@@ -5,6 +5,9 @@ using Microsoft.VisualBasic;
 using System.Security.Claims;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
+using TabloidMVC.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace TabloidMVC.Controllers
 {
@@ -14,17 +17,29 @@ namespace TabloidMVC.Controllers
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
 
+        // ASP.NET will give us an instance of our Post Repository. This is called "Dependency Injection"
         public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
         }
 
+        // GET: PostController
+
         public IActionResult Index()
         {
             var posts = _postRepository.GetAllPublishedPosts();
             return View(posts);
         }
+
+        public IActionResult MyIndex()
+        {
+            int userId = GetCurrentUserProfileId();
+            var posts = _postRepository.GetAllUserPosts(userId);
+            return View(posts);
+        }
+
+        //GET: PostController/Details/5
 
         public IActionResult Details(int id)
         {
@@ -41,12 +56,15 @@ namespace TabloidMVC.Controllers
             return View(post);
         }
 
+        //GET: PostController/Create
         public IActionResult Create()
         {
             var vm = new PostCreateViewModel();
             vm.CategoryOptions = _categoryRepository.GetAll();
             return View(vm);
         }
+
+        //POST: PostController/Create
 
         [HttpPost]
         public IActionResult Create(PostCreateViewModel vm)
@@ -65,6 +83,43 @@ namespace TabloidMVC.Controllers
             {
                 vm.CategoryOptions = _categoryRepository.GetAll();
                 return View(vm);
+            }
+        }
+
+        // GET: Posts/Edit/5
+        public IActionResult Edit(int id) 
+        {
+            int userId = GetCurrentUserProfileId();
+            Post post = _postRepository.GetUserPostById(id, userId);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            else if (post.UserProfileId != userId)
+            {
+                return NotFound();
+            }
+            else { return View(post); }
+
+            
+        }
+
+        //POST: Post/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit (int id, Post post)
+        {
+            try
+            {
+                _postRepository.UpdatePost(post);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(post);
             }
         }
 
