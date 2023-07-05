@@ -73,6 +73,9 @@
                 @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Details">
+                        <i class="fas fa-eye"></i>
+                    </a>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-primary mx-1" title="Edit User Profile">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
