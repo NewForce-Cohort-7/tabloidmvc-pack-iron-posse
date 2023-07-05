@@ -32,6 +32,7 @@ namespace TabloidMVC.Controllers
         public IActionResult Details(int id)
         {
             var comment = _commentRepository.GetCommentById(id);
+
             if (comment == null)
             {
                 // Comment not found, return NotFound result
@@ -136,6 +137,7 @@ namespace TabloidMVC.Controllers
             var currentUser = GetCurrentUser();
             return int.Parse(currentUser.FindFirstValue("id"));
         }
+         
 
         // Method to get the current user's claims
         private ClaimsPrincipal GetCurrentUser()

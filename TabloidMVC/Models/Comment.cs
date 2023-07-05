@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace TabloidMVC.Models
@@ -8,12 +9,12 @@ namespace TabloidMVC.Models
     {
         public int Id { get; set; }
         public int PostId { get; set; }
-        public int UserProfileId { get; set; }
         public string Subject { get; set; }
         public string Content { get; set; }
         public DateTime CreateDateTime { get; set; }
-        public UserProfile DisplayName { get; set; }
+        public int UserProfileId { get; set; }
+        public UserProfile UserProfile { get; set; }
         public Post Post { get; set; }
-        
+
     }
 }

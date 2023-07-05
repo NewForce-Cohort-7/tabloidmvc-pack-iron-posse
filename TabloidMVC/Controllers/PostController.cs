@@ -8,6 +8,7 @@ using TabloidMVC.Repositories;
 using TabloidMVC.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using System.Xml.Linq;
 
 namespace TabloidMVC.Controllers
 {
@@ -16,12 +17,16 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICommentRepository _commentRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
         // ASP.NET will give us an instance of our Post Repository. This is called "Dependency Injection"
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _commentRepository = commentRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
         // GET: PostController
@@ -43,18 +48,23 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
+            // Retrieve the post and related comments from your data source
             var post = _postRepository.GetPublishedPostById(id);
-            if (post == null)
+            var comments = _commentRepository.GetCommentsByPostId(id);
+            //var user = _commentRepository.GetUserDisplayName(id);
+
+            // Create an instance of the PostCommentViewModel and assign the post and comments
+            var viewModel = new PostCommentViewModel
             {
-                int userId = GetCurrentUserProfileId();
-                post = _postRepository.GetUserPostById(id, userId);
-                if (post == null)
-                {
-                    return NotFound();
-                }
-            }
-            return View(post);
+                Post = post,
+                Comments = comments,
+               
+            };
+
+            return View(viewModel);
         }
+
+
 
         //GET: PostController/Create
         public IActionResult Create()

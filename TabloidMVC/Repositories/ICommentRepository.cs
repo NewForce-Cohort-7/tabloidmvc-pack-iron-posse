@@ -10,5 +10,9 @@ namespace TabloidMVC.Repositories
         void DeleteComment(int id);
         Comment GetCommentById(int id);
         void UpdateComment(Comment comment);
+
+        //Comment GetUserDisplayName (int id);
+
+       
     }
 }

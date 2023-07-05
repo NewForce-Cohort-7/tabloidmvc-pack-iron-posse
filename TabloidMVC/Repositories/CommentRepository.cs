@@ -45,6 +45,10 @@ namespace TabloidMVC.Repositories
                             Subject = reader.GetString(reader.GetOrdinal("Subject")),
                             Content = reader.GetString(reader.GetOrdinal("Content")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                            UserProfile = new UserProfile()
+                            {
+                                DisplayName = reader.GetString(reader.GetOrdinal("CommenterName"))
+                            }
                       
                         };
 
@@ -57,6 +61,8 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
+        
 
         public Comment GetCommentById(int id)
         {
@@ -89,7 +95,10 @@ namespace TabloidMVC.Repositories
                             Subject = reader.GetString(reader.GetOrdinal("Subject")),
                             Content = reader.GetString(reader.GetOrdinal("Content")),
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
-                            
+                            UserProfile = new UserProfile()
+                            {
+                                DisplayName = reader.GetString(reader.GetOrdinal("CommenterName"))
+                            }
                         };
                     }
 
@@ -165,5 +174,51 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
+
+        //public Comment GetUserDisplayName(int id)
+        //{
+        //    using (var conn = Connection)
+        //    {
+        //        conn.Open();
+        //        using (var cmd = conn.CreateCommand())
+        //        {
+              
+
+        //            cmd.CommandText = @"
+        //                SELECT up.DisplayName AS CommenterName
+        //                FROM Comment c
+        //                LEFT JOIN UserProfile up ON c.UserProfileId = up.Id
+        //                WHERE c.Id = @id";
+
+        //            cmd.Parameters.AddWithValue("@id", id);
+
+        //            var reader = cmd.ExecuteReader();
+
+        //            Comment comment = null;
+
+        //            if (reader.Read())
+        //            {
+        //                // Create a new Comment object and populate its properties
+        //                comment = new Comment()
+        //                {
+        //                     Id = reader.GetInt32(reader.GetOrdinal("Id")),
+        //                     PostId = reader.GetInt32(reader.GetOrdinal("PostId")),
+        //                     UserProfileId = reader.GetInt32(reader.GetOrdinal("UserProfileId")),
+        //                     Subject = reader.GetString(reader.GetOrdinal("Subject")),
+        //                     Content = reader.GetString(reader.GetOrdinal("Content")),
+        //                    CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+        //                    UserProfile = new UserProfile()
+        //                    {
+        //                        DisplayName = reader.GetString(reader.GetOrdinal("CommenterName"))
+        //                    }
+        //                };
+        //            }
+
+        //            reader.Close();
+
+        //            return comment;
+        //        }
+        //    }
+        //}
     }
 }

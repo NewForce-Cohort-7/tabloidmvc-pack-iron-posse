@@ -18,5 +18,7 @@
                 return $"{FirstName} {LastName}";
             }
         }
+        public Comment Comment { get; set; }
+        public Post Post { get; set; }
     }
 }
