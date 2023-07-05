@@ -12,11 +12,33 @@ namespace TabloidMVC.Controllers
         {
             _categoryRepo = categoryRepo;
         }
-        //GET
+        //GET for listing all
         public ActionResult Index() 
         {
             List<Category> categories = _categoryRepo.GetAll();
             return View(categories);
+        }
+        //GET for Creating categories
+        public IActionResult Create() 
+        {
+            return View();
+        } 
+        //POST for creating categories
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create (Category category) 
+        {
+            try 
+            {
+                _categoryRepo.Add(category);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                return View(category);
+            }
+
         }
 
     }

@@ -8,6 +8,7 @@ using TabloidMVC.Repositories;
 using TabloidMVC.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using System.Xml.Linq;
 
 namespace TabloidMVC.Controllers
 {
@@ -16,12 +17,16 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICommentRepository _commentRepository;
+        private readonly IUserProfileRepository _userProfileRepository;
 
         // ASP.NET will give us an instance of our Post Repository. This is called "Dependency Injection"
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _commentRepository = commentRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
         // GET: PostController
@@ -43,18 +48,23 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
+            // Retrieve the post and related comments from your data source
             var post = _postRepository.GetPublishedPostById(id);
-            if (post == null)
+            var comments = _commentRepository.GetCommentsByPostId(id);
+            //var user = _commentRepository.GetUserDisplayName(id);
+
+            // Create an instance of the PostCommentViewModel and assign the post and comments
+            var viewModel = new PostCommentViewModel
             {
-                int userId = GetCurrentUserProfileId();
-                post = _postRepository.GetUserPostById(id, userId);
-                if (post == null)
-                {
-                    return NotFound();
-                }
-            }
-            return View(post);
+                Post = post,
+                Comments = comments,
+               
+            };
+
+            return View(viewModel);
         }
+
+
 
         //GET: PostController/Create
         public IActionResult Create()
@@ -89,19 +99,15 @@ namespace TabloidMVC.Controllers
         // GET: Posts/Edit/5
         public IActionResult Edit(int id) 
         {
-            int userId = GetCurrentUserProfileId();
-            Post post = _postRepository.GetUserPostById(id, userId);
+            var vm = new PostEditViewModel();
+            vm.Post = _postRepository.GetPublishedPostById(id);
+            vm.CategoryOptions = _categoryRepository.GetAll();
 
-            if (post == null)
+            if (vm.Post == null)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
-
-            else if (post.UserProfileId != userId)
-            {
-                return NotFound();
-            }
-            else { return View(post); }
+            return View(vm);
 
             
         }
@@ -118,6 +124,30 @@ namespace TabloidMVC.Controllers
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
+            {
+                return View(post);
+            }
+        }
+
+
+        //GET: Post/Delete/5
+        public IActionResult Delete(int id) 
+        {
+            Post post = _postRepository.GetPublishedPostById(id);
+            return View(post);
+        }
+
+        //POST: Post/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id, Post post)
+        {
+            try
+            {
+                _postRepository.DeletePost(id);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex) 
             {
                 return View(post);
             }
