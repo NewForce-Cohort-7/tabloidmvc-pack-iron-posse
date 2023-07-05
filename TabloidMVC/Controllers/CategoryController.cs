@@ -40,6 +40,27 @@ namespace TabloidMVC.Controllers
             }
 
         }
+        //GET for deleting categories 
+        public ActionResult Delete(int id) 
+        {
+            Category category = _categoryRepo.GetCategoryById(id);
+            return View(category);
+        }
+        //POST for deleting categories
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete (int id, Category category)
+        {
+            try
+            {
+                _categoryRepo.DeleteCategory(id);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex) 
+            {
+                return View(category);
+            }
+        }
 
     }
 }
