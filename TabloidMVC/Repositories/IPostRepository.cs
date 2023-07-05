@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿//Lists all methods from PostRepository.cs
 using TabloidMVC.Models;
 
 namespace TabloidMVC.Repositories
@@ -11,6 +11,7 @@ namespace TabloidMVC.Repositories
         Post GetUserPostById(int id, int userProfileId);
         void UpdatePost(Post post);
         List<Post> GetAllUserPosts(int id);
+        void DeletePost(int id);
 
     }
 }
