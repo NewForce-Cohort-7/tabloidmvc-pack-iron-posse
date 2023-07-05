@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿//Lists all methods from PostRepository.cs
 using TabloidMVC.Models;
 
 namespace TabloidMVC.Repositories
