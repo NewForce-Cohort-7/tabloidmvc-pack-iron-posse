@@ -10,7 +10,7 @@ namespace TabloidMVC.Controllers
 
         // GET: UserProfileController
         private readonly IUserProfileRepository _userProfileRepo;
-        
+
         public UserProfileController(IUserProfileRepository userProfileRepository)
         {
             _userProfileRepo = userProfileRepository;
@@ -21,5 +21,20 @@ namespace TabloidMVC.Controllers
 
             return View(userProfiles);
         }
+
+        public IActionResult Details(int id)
+        {
+            var userProfile = _userProfileRepo.GetUserProfileById(id);
+            if (userProfile == null)
+            {
+                userProfile = _userProfileRepo.GetUserProfileById(id);
+                if (userProfile == null)
+                {
+                    return NotFound();
+                }
+            }
+            return View(userProfile);
+        }
+
     }
 }
