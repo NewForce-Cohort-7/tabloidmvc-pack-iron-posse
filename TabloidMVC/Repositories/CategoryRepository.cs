@@ -83,7 +83,7 @@ namespace TabloidMVC.Repositories
                 }
             }
         }
-        public void DeleteCategory(int id) 
+        public void DeleteCategory(int categoryId) 
         {
             using (SqlConnection conn = Connection)
             {
