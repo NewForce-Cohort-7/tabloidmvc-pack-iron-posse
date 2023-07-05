@@ -1,0 +1,2 @@
+﻿INSERT into UserProfile (DisplayName, FirstName, LastName, Email, CreateDateTime, ImageLocation, UserTypeId)
+VALUES ('Test', 'Test', 'Test', 'test@test.com', '2023-06-05 10:00:00.000', 'image.com/image', 1)

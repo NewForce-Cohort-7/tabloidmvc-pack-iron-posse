@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 using TabloidMVC.Utils;
 
@@ -50,6 +51,91 @@ namespace TabloidMVC.Repositories
                     reader.Close();
 
                     return userProfile;
+                }
+            }
+        }
+        public List<UserProfile> GetAllUserProfiles()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT UserProfile.id, UserProfile.FirstName, UserProfile.LastName, UserProfile.DisplayName, UserProfile.Email,
+                              UserProfile.CreateDateTime, UserProfile.ImageLocation, UserProfile.UserTypeId
+                         FROM UserProfile
+                    ";
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<UserProfile> userProfiles = new List<UserProfile>();
+                    while (reader.Read())
+                    {
+                        UserProfile userProfile = new UserProfile
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                            ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
+                            UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
+            
+                        };
+
+                        userProfiles.Add(userProfile);
+                    }
+
+                    reader.Close();
+
+                    return userProfiles;
+                }
+            }
+        }
+
+        public UserProfile GetUserProfileById(int id)
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                       SELECT UserProfile.id, UserProfile.FirstName, UserProfile.LastName, UserProfile.DisplayName, UserProfile.Email,
+                              UserProfile.CreateDateTime, UserProfile.ImageLocation, UserProfile.UserTypeId
+                         FROM UserProfile
+                        WHERE Id = @id
+                    ";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        UserProfile userProfile = new UserProfile
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Email = reader.GetString(reader.GetOrdinal("Email")),
+                            FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                            LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                            DisplayName = reader.GetString(reader.GetOrdinal("DisplayName")),
+                            CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
+                            ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
+                            UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
+                           
+                        };
+
+                        reader.Close();
+                        return userProfile;
+                    }
+                    else
+                    {
+                        reader.Close();
+                        return null;
+                    }
                 }
             }
         }
