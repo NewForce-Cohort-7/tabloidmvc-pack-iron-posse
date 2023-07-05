@@ -62,10 +62,9 @@ namespace TabloidMVC.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                       SELECT u.id, u.FirstName, u.LastName, u.DisplayName, u.Email,
-                              u.CreateDateTime, u.ImageLocation, u.UserTypeId,
-                              ut.[Name] AS UserTypeName
-                         FROM UserProfile u
+                       SELECT UserProfile.id, UserProfile.FirstName, UserProfile.LastName, UserProfile.DisplayName, UserProfile.Email,
+                              UserProfile.CreateDateTime, UserProfile.ImageLocation, UserProfile.UserTypeId
+                         FROM UserProfile
                     ";
 
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -83,11 +82,7 @@ namespace TabloidMVC.Repositories
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                             ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
                             UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
-                            UserType = new UserType()
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
-                                Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
-                            },
+            
                         };
 
                         userProfiles.Add(userProfile);
@@ -108,10 +103,9 @@ namespace TabloidMVC.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                       SELECT u.id, u.FirstName, u.LastName, u.DisplayName, u.Email,
-                              u.CreateDateTime, u.ImageLocation, u.UserTypeId,
-                              ut.[Name] AS UserTypeName
-                         FROM UserProfile u
+                       SELECT UserProfile.id, UserProfile.FirstName, UserProfile.LastName, UserProfile.DisplayName, UserProfile.Email,
+                              UserProfile.CreateDateTime, UserProfile.ImageLocation, UserProfile.UserTypeId
+                         FROM UserProfile
                         WHERE Id = @id
                     ";
 
@@ -131,11 +125,7 @@ namespace TabloidMVC.Repositories
                             CreateDateTime = reader.GetDateTime(reader.GetOrdinal("CreateDateTime")),
                             ImageLocation = DbUtils.GetNullableString(reader, "ImageLocation"),
                             UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
-                            UserType = new UserType()
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("UserTypeId")),
-                                Name = reader.GetString(reader.GetOrdinal("UserTypeName"))
-                            },
+                           
                         };
 
                         reader.Close();
